@@ -9,10 +9,7 @@ import { ScrollArea } from "@yamada-ui/react"
 import { useState } from "react"
 import EditPage from "@/app/components/editpage/editpage"
 
-type aslist = {
-  width: number;
-  height: number;
-}
+
 
 
 export default function Home() {
@@ -20,7 +17,6 @@ export default function Home() {
   const [loopTime, setLoopTime] = useState([0]);
   const [pageSelected, setPageSelected] = useState(0);
   const [imageList, setImageList] = useState<string[]>([]);
-  const [aspectList, setAspectList] = useState<aslist[]>([{width: 5, height: 5}]);
 
   const handleTitleUpdate = (title: string) => {
     const newList = list;
@@ -28,11 +24,6 @@ export default function Home() {
     setList([...newList]);
   }
 
-  const handleAspectUpdate = (aspect: aslist) => {
-    const newAspectList = aspectList;
-    newAspectList[pageSelected] = aspect;
-    setAspectList([...newAspectList]);
-  }
 
 
   const handleChangeFile = (files: File[] | undefined) => {
@@ -52,7 +43,6 @@ export default function Home() {
             <Button colorScheme="primary" onClick={() => {
               setLoopTime([...loopTime, loopTime.length]);
               setList([...list, "ページ" + list.length]);
-              setAspectList([...aspectList, {width: 5, height: 5}]);
               }}>+</Button>
           </CardHeader>
           <CardBody>
@@ -71,7 +61,7 @@ export default function Home() {
           </ScrollArea>
           </Card>
           <div className="col-span-4 m-2">
-            <EditPage cpage={pageSelected} ctitle={list[pageSelected]} cimage={imageList[pageSelected]} caspect={aspectList[pageSelected]} onAspectUpdate={handleAspectUpdate} onImageUpdate={handleChangeFile} onTitleUpdate={handleTitleUpdate}/>
+            <EditPage cpage={pageSelected} ctitle={list[pageSelected]} cimage={imageList[pageSelected]} onImageUpdate={handleChangeFile} onTitleUpdate={handleTitleUpdate}/>
           </div>
         </div>
       </main>
