@@ -30,6 +30,13 @@ type imageFixedType = {
   hor: string;
 }
 
+type imagecropType = {
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+}
+
 export default function Home() {
   const [list, setList] = useState<string[]>(["タイトル"]);
   const [loopTime, setLoopTime] = useState([0]);
@@ -39,6 +46,7 @@ export default function Home() {
   const [ imagePosition, setImagePosition ] = useState<imagePositionType[]>([{x: 0, y : 0}]);
   const [ imageGlobalPosition, setImageGlobalPosition ] = useState<imageGlobalPositionType[]>([{x: 50, y: 50}]);
   const [ imageFixed, setImageFixed ] = useState<imageFixedType[]>([{ver: "2", hor: "2"}]);
+  const [ imageCrop, setImageCrop ] = useState<imagecropType[]>([{top: 0, bottom: 100, left: 0, right: 100}]);
 
   const handleTitleUpdate = (title: string) => {
     const newList = list;
@@ -97,6 +105,11 @@ export default function Home() {
     setImageFixed([...newImageFixed]);
   }
 
+  const handleImageCrop = (top: number, bottom: number, left: number, right: number) => {
+    const newImageCrop = imageCrop;
+    newImageCrop[pageSelected] = {top: top, bottom: bottom, left: left, right: right};
+    setImageCrop([...newImageCrop]);
+  }
 
 
   return (
@@ -112,6 +125,7 @@ export default function Home() {
               setImagePosition([...imagePosition, {x: 0, y: 0}]);
               setImageGlobalPosition([...imageGlobalPosition, {x: 50, y: 50}]);
               setImageFixed([...imageFixed, {ver: "2", hor: "2"}]);
+              setImageCrop([...imageCrop, {top: 0, bottom: 100, left: 0, right: 100}]);
               }}>+</Button>
           </CardHeader>
           <CardBody>
@@ -132,12 +146,12 @@ export default function Home() {
           <div className="col-span-4 m-2">
             <EditPage 
             cpage={pageSelected} ctitle={list[pageSelected]} cimage={imageList[pageSelected]} csize={imageSize[pageSelected]} cposition={imagePosition[pageSelected]} cglobalposition={imageGlobalPosition[pageSelected]}
-            cimagefixposition={imageFixed[pageSelected]}
+            cimagefixposition={imageFixed[pageSelected]} cimagecrop={imageCrop[pageSelected]}
             onImageXPositionUpdate={handleXPositionUpdate} onImageYPositionUpdate={handleYPositionUpdate} 
             onImageWSizeUpdate={handleWSizeUpdate} onImageHSizeUpdate={handleHSizeUpdate} 
             onImageUpdate={handleChangeFile} onTitleUpdate={handleTitleUpdate}
             onImageGlobalXPositionUpdate={handleGlobalXPositionUpdate} onImageGlobalYPositionUpdate={handleGlobalYPositionUpdate}
-            onImageFixPositionUpdate={handleImageFixed}
+            onImageFixPositionUpdate={handleImageFixed} onImageCropUpdate={handleImageCrop}
             />
           </div>
         </div>

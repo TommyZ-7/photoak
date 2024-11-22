@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import ReactCrop, { Crop, PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
 const ImageCropperClient = () => {

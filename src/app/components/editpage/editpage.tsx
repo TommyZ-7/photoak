@@ -1,4 +1,5 @@
 'use client'
+import { useState } from "react"
 import { IconButton, Text } from "@yamada-ui/react"
 import { Input } from "@yamada-ui/react"
 import { Tabs, Tab, TabPanel } from "@yamada-ui/react"
@@ -13,6 +14,14 @@ import {
   } from "@yamada-ui/react"
   import { Checkbox } from "@yamada-ui/react"
   import { Radio, RadioGroup } from "@yamada-ui/react"
+import {
+    RangeSlider,
+    RangeSliderTrack,
+    RangeSliderFilledTrack,
+    RangeSliderStartThumb,
+    RangeSliderEndThumb,
+    RangeSliderMark,
+} from "@yamada-ui/react"
 
 
 interface EditPageProps {
@@ -23,6 +32,8 @@ interface EditPageProps {
     cposition: imagePositionType;
     cglobalposition: imageGlobalPositionType;
     cimagefixposition: imageFixedType;
+    cimagecrop: imagecropType;
+    onImageCropUpdate: (top: number, bottom: number, left: number, right: number) => void;
     onImageFixPositionUpdate: (ver: string, hor: string) => void;
     onImageGlobalXPositionUpdate: (x: number) => void;
     onImageGlobalYPositionUpdate: (y: number) => void;
@@ -54,10 +65,25 @@ type imageFixedType = {
     hor: string;
 }
 
+type imagecropType = {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+}
 
-export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition, cimagefixposition , onImageFixPositionUpdate, onImageGlobalXPositionUpdate, onImageGlobalYPositionUpdate, onImageWSizeUpdate,onImageUpdate ,onTitleUpdate }: EditPageProps) {
+type test = {
+    width: number;
+    height: number;
+    ver: number;
+    hor: number;
+}
+
+
+
+export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition, cimagefixposition , cimagecrop, onImageCropUpdate, onImageFixPositionUpdate, onImageGlobalXPositionUpdate, onImageGlobalYPositionUpdate, onImageWSizeUpdate,onImageUpdate ,onTitleUpdate }: EditPageProps) {
     console.log(cpage)
-    
+    const [test, setTest] = useState<test>({width: 100, height: 100, ver: 50, hor: 50})
     return (
         <div>
             <Text>{ctitle}</Text>
@@ -73,8 +99,14 @@ export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition
                         </CardHeader>
                         <CardBody>
                             <div className="grid grid-cols-2 w-full" >
-                                <div className="m-3">
-                                    <img src={cimage} alt="preview" />
+                                <div className="m-3 relative">
+                                    <img src={cimage} alt="preview" 
+                                    className="absolute blur"
+                                    />
+                                    <img src={cimage} alt="preview" 
+                                    style={{ clipPath: "inset(" + cimagecrop.top + "% " + (100-cimagecrop.right) + "% " + (100-cimagecrop.bottom) + "% " + cimagecrop.left + "%)"} }
+                                    className=""
+                                    />
                                 </div>
                                 <div className="m-3">
                                     <Text>設定</Text>
@@ -110,6 +142,25 @@ export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition
                                         <Radio value="2">中</Radio>
                                         <Radio value="3">下</Radio>
                                     </RadioGroup>
+                                    <Text>トリミング</Text>
+                                    <RangeSlider min={0} max={100} step={1} value={[cimagecrop.top, cimagecrop.bottom]} onChange={(value) => onImageCropUpdate(value[0], value[1], cimagecrop.left, cimagecrop.right)}>
+                                        <RangeSliderTrack>
+                                            <RangeSliderFilledTrack />
+                                        </RangeSliderTrack>
+                                        <RangeSliderStartThumb />
+                                        <RangeSliderEndThumb />
+                                        <RangeSliderMark value={cimagecrop.top} />
+                                        <RangeSliderMark value={cimagecrop.bottom} />
+                                    </RangeSlider>
+                                    <RangeSlider min={0} max={100} step={1} value={[cimagecrop.left, cimagecrop.right]} onChange={(value) => onImageCropUpdate(cimagecrop.top, cimagecrop.bottom, value[0], value[1])}>
+                                        <RangeSliderTrack>
+                                            <RangeSliderFilledTrack />
+                                        </RangeSliderTrack>
+                                        <RangeSliderStartThumb />
+                                        <RangeSliderEndThumb />
+                                        <RangeSliderMark value={cimagecrop.left} />
+                                        <RangeSliderMark value={cimagecrop.right} />
+                                    </RangeSlider>
 
 
 
@@ -127,7 +178,7 @@ export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition
                         src={cimage} 
                         className={"absolute object-fill " + (cimagefixposition.hor == "1" ? "" : cimagefixposition.hor == "2" ? "-translate-x-1/2" : "-translate-x-full") + " " + (cimagefixposition.ver == "1" ? "" : cimagefixposition.ver == "2" ? "-translate-y-1/2" : "-translate-y-full")}
                         alt="preview" 
-                        style={{width: csize.width +"%", height: "auto", top: cglobalposition.y + "%", left: cglobalposition.x + "%"}}
+                        style={{width: csize.width +"%", height: "auto", top: cglobalposition.y + "%", left: cglobalposition.x + "%", clipPath: "inset(" + cimagecrop.top + "% " + (100-cimagecrop.right) + "% " + (100-cimagecrop.bottom) + "% " + cimagecrop.left + "%)"}}
                         />
                     </div>
         </TabPanel>
