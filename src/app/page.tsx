@@ -26,8 +26,8 @@ type imageGlobalPositionType = {
 }
 
 type imageFixedType = {
-  ver: string;
-  hor: string;
+  ver: number;
+  hor: number;
 }
 
 type imagecropType = {
@@ -45,7 +45,7 @@ export default function Home() {
   const [ imageSize, setImageSize ] = useState<imageSizeType[]>([{width: 100, height: 100}]);
   const [ imagePosition, setImagePosition ] = useState<imagePositionType[]>([{x: 0, y : 0}]);
   const [ imageGlobalPosition, setImageGlobalPosition ] = useState<imageGlobalPositionType[]>([{x: 50, y: 50}]);
-  const [ imageFixed, setImageFixed ] = useState<imageFixedType[]>([{ver: "2", hor: "2"}]);
+  const [ imageFixed, setImageFixed ] = useState<imageFixedType[]>([{ver: 50, hor: 50}]);
   const [ imageCrop, setImageCrop ] = useState<imagecropType[]>([{top: 0, bottom: 100, left: 0, right: 100}]);
 
   const handleTitleUpdate = (title: string) => {
@@ -99,7 +99,8 @@ export default function Home() {
     setImageGlobalPosition([...newPositionList]);
   }
 
-  const handleImageFixed = (ver: string, hor: string) => {
+  const handleImageFixed = (ver: number, hor: number) => {
+    console.log(ver, hor);
     const newImageFixed = imageFixed;
     newImageFixed[pageSelected] = {ver: ver, hor: hor};
     setImageFixed([...newImageFixed]);
@@ -124,7 +125,7 @@ export default function Home() {
               setImageSize([...imageSize, {width: 100, height: 100}]);
               setImagePosition([...imagePosition, {x: 0, y: 0}]);
               setImageGlobalPosition([...imageGlobalPosition, {x: 50, y: 50}]);
-              setImageFixed([...imageFixed, {ver: "2", hor: "2"}]);
+              setImageFixed([...imageFixed, {ver: 50, hor: 50}]);
               setImageCrop([...imageCrop, {top: 0, bottom: 100, left: 0, right: 100}]);
               }}>+</Button>
           </CardHeader>

@@ -34,7 +34,7 @@ interface EditPageProps {
     cimagefixposition: imageFixedType;
     cimagecrop: imagecropType;
     onImageCropUpdate: (top: number, bottom: number, left: number, right: number) => void;
-    onImageFixPositionUpdate: (ver: string, hor: string) => void;
+    onImageFixPositionUpdate: (ver: number, hor: number) => void;
     onImageGlobalXPositionUpdate: (x: number) => void;
     onImageGlobalYPositionUpdate: (y: number) => void;
     onImageXPositionUpdate: (x: number) => void;
@@ -61,8 +61,8 @@ type imageGlobalPositionType = {
 }
 
 type imageFixedType = {
-    ver: string;
-    hor: string;
+    ver: number;
+    hor: number;
 }
 
 type imagecropType = {
@@ -72,18 +72,11 @@ type imagecropType = {
     right: number;
 }
 
-type test = {
-    width: number;
-    height: number;
-    ver: number;
-    hor: number;
-}
-
 
 
 export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition, cimagefixposition , cimagecrop, onImageCropUpdate, onImageFixPositionUpdate, onImageGlobalXPositionUpdate, onImageGlobalYPositionUpdate, onImageWSizeUpdate,onImageUpdate ,onTitleUpdate }: EditPageProps) {
     console.log(cpage)
-    const [test, setTest] = useState<test>({width: 100, height: 100, ver: 50, hor: 50})
+    
     return (
         <div>
             <Text>{ctitle}</Text>
@@ -133,14 +126,14 @@ export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition
                                     </Slider>
                                     <Text>中央位置</Text>
                                     <RadioGroup direction="row" value={cimagefixposition.hor} onChange={(value) => onImageFixPositionUpdate(cimagefixposition.ver, value)}>
-                                        <Radio value="1">左</Radio>
-                                        <Radio value="2">中</Radio>
-                                        <Radio value="3">右</Radio>
+                                        <Radio value="0">左</Radio>
+                                        <Radio value="50">中</Radio>
+                                        <Radio value="100">右</Radio>
                                     </RadioGroup>
                                     <RadioGroup direction="row" value={cimagefixposition.ver} onChange={(value) => onImageFixPositionUpdate(value , cimagefixposition.hor)}>
-                                        <Radio value="1">上</Radio>
-                                        <Radio value="2">中</Radio>
-                                        <Radio value="3">下</Radio>
+                                        <Radio value="0">上</Radio>
+                                        <Radio value="50">中</Radio>
+                                        <Radio value="100">下</Radio>
                                     </RadioGroup>
                                     <Text>トリミング</Text>
                                     <RangeSlider min={0} max={100} step={1} value={[cimagecrop.top, cimagecrop.bottom]} onChange={(value) => onImageCropUpdate(value[0], value[1], cimagecrop.left, cimagecrop.right)}>
@@ -176,9 +169,9 @@ export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition
                     <div className="border relative overflow-hidden aspect-[5/7]" >
                         <img 
                         src={cimage} 
-                        className={"absolute object-fill " + (cimagefixposition.hor == "1" ? "" : cimagefixposition.hor == "2" ? "-translate-x-1/2" : "-translate-x-full") + " " + (cimagefixposition.ver == "1" ? "" : cimagefixposition.ver == "2" ? "-translate-y-1/2" : "-translate-y-full")}
+                        className={"absolute object-fill "}
                         alt="preview" 
-                        style={{width: csize.width +"%", height: "auto", top: cglobalposition.y + "%", left: cglobalposition.x + "%", clipPath: "inset(" + cimagecrop.top + "% " + (100-cimagecrop.right) + "% " + (100-cimagecrop.bottom) + "% " + cimagecrop.left + "%)"}}
+                        style={{width: csize.width +"%", height: "auto", top: cglobalposition.y + "%", left: cglobalposition.x + "%", clipPath: "inset(" + cimagecrop.top + "% " + (100-cimagecrop.right) + "% " + (100-cimagecrop.bottom) + "% " + cimagecrop.left + "%)", transform: "translate(" + ((-cimagefixposition.hor) + (-cimagecrop.left/2) + ((100-cimagecrop.right)/2)) + "%, " + ((-cimagefixposition.ver) + (-cimagecrop.top/2)) + "%)"}}
                         />
                     </div>
         </TabPanel>
