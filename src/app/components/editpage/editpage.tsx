@@ -2,53 +2,69 @@
 import { IconButton, Text } from "@yamada-ui/react"
 import { Input } from "@yamada-ui/react"
 import { Tabs, Tab, TabPanel } from "@yamada-ui/react"
-import { AspectRatio } from "@yamada-ui/react"
 import { FileButton } from "@yamada-ui/react"
 import { GrAdd } from "react-icons/gr";
 import { Card, CardHeader, CardBody } from "@yamada-ui/react"
-import { useState } from "react"
 import {
     Slider,
     SliderTrack,
     SliderFilledTrack,
     SliderThumb,
-    SliderMark,
   } from "@yamada-ui/react"
+  import { Checkbox } from "@yamada-ui/react"
+  import { Radio, RadioGroup } from "@yamada-ui/react"
+
 
 interface EditPageProps {
     cpage: number;
     ctitle: string;
     cimage: string;
+    csize: imageSizeType;
+    cposition: imagePositionType;
+    cglobalposition: imageGlobalPositionType;
+    cimagefixposition: imageFixedType;
+    onImageFixPositionUpdate: (ver: string, hor: string) => void;
+    onImageGlobalXPositionUpdate: (x: number) => void;
+    onImageGlobalYPositionUpdate: (y: number) => void;
+    onImageXPositionUpdate: (x: number) => void;
+    onImageYPositionUpdate: (y: number) => void;
+    onImageWSizeUpdate: (width: number) => void;
+    onImageHSizeUpdate: (height: number) => void;
     onImageUpdate: (files: File[] | undefined) => void;
     onTitleUpdate: (title: string) => void;
 }
 
-type imageSize = {
-    width: string;
-    height: string;
+type imageSizeType = {
+    width: number;
+    height: number;
 }
 
-export default function EditPage({ cpage, ctitle, cimage, onImageUpdate ,onTitleUpdate }: EditPageProps) {
-    console.log(cpage)
-    const [imageSize, setImageSize] = useState<imageSize[]>([{width: "100%", height: "100%"}]);
-    
-    const  handleWSizeUpdate = (width: string) => {
-        const newAspectList = imageSize;
-        newAspectList[0] = {width: width + "%", height: imageSize[0].height};
-        setImageSize([...newAspectList]);
-    };
-    const  handleHSizeUpdate = (height: string) => {
-        const newAspectList = imageSize;
-        newAspectList[0] = {width: imageSize[0].width, height: height + "%"};
-        setImageSize([...newAspectList]);
-    };
+type imagePositionType = {
+    x: number;
+    y: number;
+}
 
+type imageGlobalPositionType = {
+    x: number;
+    y: number;
+}
+
+type imageFixedType = {
+    ver: string;
+    hor: string;
+}
+
+
+export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition, cimagefixposition , onImageFixPositionUpdate, onImageGlobalXPositionUpdate, onImageGlobalYPositionUpdate, onImageWSizeUpdate,onImageUpdate ,onTitleUpdate }: EditPageProps) {
+    console.log(cpage)
+    
     return (
         <div>
             <Text>{ctitle}</Text>
             <Input value={ctitle} onChange={(e) => onTitleUpdate(e.target.value)} />
             <Tabs>
-                <Tab>設定</Tab>
+                <Tab>画像</Tab>
+                <Tab>テキスト</Tab>
                 <Tab>プレビュー</Tab>
                 <TabPanel>
                     <Card>
@@ -62,33 +78,59 @@ export default function EditPage({ cpage, ctitle, cimage, onImageUpdate ,onTitle
                                 </div>
                                 <div className="m-3">
                                     <Text>設定</Text>
-                                    <Text>サイズ</Text>
-                                    <Text>横:{imageSize[0].width}</Text>
-                                    <Slider aria-label="slider-ex-1" defaultValue={100} min={1} max={100} onChangeEnd={(value) => handleWSizeUpdate(value.toString())}>
+                                    <Text>サイズ:{csize.width}</Text>
+                                    <Slider aria-label="slider-ex-1" value={csize.width} min={1} max={200} onChange={(value) => onImageWSizeUpdate(value)}>
                                         <SliderTrack>
                                             <SliderFilledTrack />
                                         </SliderTrack>
                                         <SliderThumb />
                                     </Slider>
-                                    <Text>縦:{imageSize[0].height}</Text>
-                                    <Slider aria-label="slider-ex-1" defaultValue={100} min={1} max={100} onChangeEnd={(value) => handleHSizeUpdate(value.toString())}>
+                                    <Text>横:{cglobalposition.x}</Text>
+                                    <Slider aria-label="slider-ex-1" value={cglobalposition.x} min={0} max={100} onChange={(value) => onImageGlobalXPositionUpdate(value)}>
                                         <SliderTrack>
                                             <SliderFilledTrack />
                                         </SliderTrack>
                                         <SliderThumb />
                                     </Slider>
+                                    <Text>縦:{cglobalposition.y}</Text>
+                                    <Slider aria-label="slider-ex-1" value={cglobalposition.y} min={0} max={100} onChange={(value) => onImageGlobalYPositionUpdate(value)}>
+                                        <SliderTrack>
+                                            <SliderFilledTrack />
+                                        </SliderTrack>
+                                        <SliderThumb />
+                                    </Slider>
+                                    <Text>中央位置</Text>
+                                    <RadioGroup direction="row" value={cimagefixposition.hor} onChange={(value) => onImageFixPositionUpdate(cimagefixposition.ver, value)}>
+                                        <Radio value="1">左</Radio>
+                                        <Radio value="2">中</Radio>
+                                        <Radio value="3">右</Radio>
+                                    </RadioGroup>
+                                    <RadioGroup direction="row" value={cimagefixposition.ver} onChange={(value) => onImageFixPositionUpdate(value , cimagefixposition.hor)}>
+                                        <Radio value="1">上</Radio>
+                                        <Radio value="2">中</Radio>
+                                        <Radio value="3">下</Radio>
+                                    </RadioGroup>
 
-                                    
+
+
                                 </div>
                             </div>
                         </CardBody>
                     </Card>
                 </TabPanel>
                 <TabPanel>
-                            <AspectRatio ratio={5 / 7} className="border" w="full">
-                                <img src={cimage} alt="preview" style={{width: imageSize[0].width, height: imageSize[0].height, objectPosition: "0% 0%"}} />
-                            </AspectRatio>
+                    <Text>テキスト</Text>
                 </TabPanel>
+                <TabPanel>
+                    <div className="border relative overflow-hidden aspect-[5/7]" >
+                        <img 
+                        src={cimage} 
+                        className={"absolute object-fill " + (cimagefixposition.hor == "1" ? "" : cimagefixposition.hor == "2" ? "-translate-x-1/2" : "-translate-x-full") + " " + (cimagefixposition.ver == "1" ? "" : cimagefixposition.ver == "2" ? "-translate-y-1/2" : "-translate-y-full")}
+                        alt="preview" 
+                        style={{width: csize.width +"%", height: "auto", top: cglobalposition.y + "%", left: cglobalposition.x + "%"}}
+                        />
+                    </div>
+        </TabPanel>
             </Tabs>
         </div>
     )
