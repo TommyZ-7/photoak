@@ -1,5 +1,4 @@
 'use client'
-import { useState } from "react"
 import { IconButton, Text } from "@yamada-ui/react"
 import { Input } from "@yamada-ui/react"
 import { Tabs, Tab, TabPanel } from "@yamada-ui/react"
@@ -12,7 +11,6 @@ import {
     SliderFilledTrack,
     SliderThumb,
   } from "@yamada-ui/react"
-  import { Checkbox } from "@yamada-ui/react"
   import { Radio, RadioGroup } from "@yamada-ui/react"
 import {
     RangeSlider,
