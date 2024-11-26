@@ -131,7 +131,7 @@ export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition
                                     <RadioGroup direction="row" value={cimagefixposition.ver} onChange={(value) => onImageFixPositionUpdate(value , cimagefixposition.hor)}>
                                         <Radio value="0">上</Radio>
                                         <Radio value="50">中</Radio>
-                                        <Radio value="100">下</Radio>
+                                        <Radio value="100" >下</Radio>
                                     </RadioGroup>
                                     <Text>トリミング</Text>
                                     <RangeSlider min={0} max={100} step={1} value={[cimagecrop.top, cimagecrop.bottom]} onChange={(value) => onImageCropUpdate(value[0], value[1], cimagecrop.left, cimagecrop.right)}>
@@ -165,11 +165,24 @@ export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition
                 </TabPanel>
                 <TabPanel>
                     <div className="border relative overflow-hidden aspect-[5/7]" >
+
                         <img 
                         src={cimage} 
                         className={"absolute object-fill "}
                         alt="preview" 
-                        style={{width: csize.width +"%", height: "auto", top: cglobalposition.y + "%", left: cglobalposition.x + "%", clipPath: "inset(" + cimagecrop.top + "% " + (100-cimagecrop.right) + "% " + (100-cimagecrop.bottom) + "% " + cimagecrop.left + "%)", transform: "translate(" + ((-cimagefixposition.hor) + (-cimagecrop.left/2) + ((100-cimagecrop.right)/2)) + "%, " + ((-cimagefixposition.ver) + (-cimagecrop.top/2)) + "%)"}}
+                        style={{width: csize.width +"%", height: "auto", top: cglobalposition.y + "%", left: cglobalposition.x + "%", clipPath: "inset(" + cimagecrop.top + "% " + (100-cimagecrop.right) + "% " + (100-cimagecrop.bottom) + "% " + cimagecrop.left + "%)", 
+                            transform: "translate(" +  
+                            
+                            
+                            ((-cimagefixposition.hor) + (-cimagecrop.left/2) + ((100-cimagecrop.right)/2))
+                        
+
+                            + "%, " + 
+
+                            
+                            ((-cimagefixposition.ver) + 
+                            (-cimagecrop.top/2) + ((100-cimagecrop.bottom)/2)) + "%)"
+                        }}
                         />
                     </div>
         </TabPanel>
