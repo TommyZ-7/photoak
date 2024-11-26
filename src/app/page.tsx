@@ -26,8 +26,8 @@ type imageGlobalPositionType = {
 }
 
 type imageFixedType = {
-  ver: number;
-  hor: number;
+  ver: string;
+  hor: string;
 }
 
 type imagecropType = {
@@ -37,6 +37,17 @@ type imagecropType = {
   right: number;
 }
 
+type textConfigType = {
+  text: string;
+  size: number;
+  color: string;
+  position: imagePositionType;
+  fixtype: imageFixedType;
+  font: string;
+}
+
+
+
 export default function Home() {
   const [list, setList] = useState<string[]>(["タイトル"]);
   const [loopTime, setLoopTime] = useState([0]);
@@ -45,8 +56,10 @@ export default function Home() {
   const [ imageSize, setImageSize ] = useState<imageSizeType[]>([{width: 100, height: 100}]);
   const [ imagePosition, setImagePosition ] = useState<imagePositionType[]>([{x: 0, y : 0}]);
   const [ imageGlobalPosition, setImageGlobalPosition ] = useState<imageGlobalPositionType[]>([{x: 50, y: 50}]);
-  const [ imageFixed, setImageFixed ] = useState<imageFixedType[]>([{ver: 50, hor: 50}]);
+  const [ imageFixed, setImageFixed ] = useState<imageFixedType[]>([{ver: "2", hor: "2"}]);
   const [ imageCrop, setImageCrop ] = useState<imagecropType[]>([{top: 0, bottom: 100, left: 0, right: 100}]);
+  const [ textConfig , setTextConfig ] = useState<textConfigType[]>([{text: "テキスト", size: 10, color: "#000000", position: {x: 0, y: 0}, fixtype: {ver: "2", hor: "2"}, font: "Arial"}]);
+
 
   const handleTitleUpdate = (title: string) => {
     const newList = list;
@@ -54,6 +67,41 @@ export default function Home() {
     setList([...newList]);
   }
 
+  const handleTextUpdate = (text: string) => {
+    const newTextConfig = textConfig;
+    newTextConfig[pageSelected] = {text: text, size: textConfig[pageSelected].size, color: textConfig[pageSelected].color, position: textConfig[pageSelected].position, fixtype: textConfig[pageSelected].fixtype, font: textConfig[pageSelected].font};
+    setTextConfig([...newTextConfig]);
+  }
+
+  const handleTextSizeUpdate = (size: number) => {
+    const newTextConfig = textConfig;
+    newTextConfig[pageSelected] = {text: textConfig[pageSelected].text, size: size, color: textConfig[pageSelected].color, position: textConfig[pageSelected].position, fixtype: textConfig[pageSelected].fixtype, font: textConfig[pageSelected].font};
+    setTextConfig([...newTextConfig]);
+  }
+  
+  const handleTextColorUpdate = (color: string) => {
+    const newTextConfig = textConfig;
+    newTextConfig[pageSelected] = {text: textConfig[pageSelected].text, size: textConfig[pageSelected].size, color: color, position: textConfig[pageSelected].position, fixtype: textConfig[pageSelected].fixtype, font: textConfig[pageSelected].font};
+    setTextConfig([...newTextConfig]);
+  }
+
+  const handleTextFontUpdate = (font: string) => {
+    const newTextConfig = textConfig;
+    newTextConfig[pageSelected] = {text: textConfig[pageSelected].text, size: textConfig[pageSelected].size, color: textConfig[pageSelected].color, position: textConfig[pageSelected].position, fixtype: textConfig[pageSelected].fixtype, font: font};
+    setTextConfig([...newTextConfig]);
+  }
+  
+  const handleTextPositionUpdate = (x: number, y: number) => {
+    const newTextConfig = textConfig;
+    newTextConfig[pageSelected] = {text: textConfig[pageSelected].text, size: textConfig[pageSelected].size, color: textConfig[pageSelected].color, position: {x: x, y: y}, fixtype: textConfig[pageSelected].fixtype, font: textConfig[pageSelected].font};
+    setTextConfig([...newTextConfig]);
+  }
+
+  const handleTextFixPositionUpdate = (ver: string, hor: string) => {
+    const newTextConfig = textConfig;
+    newTextConfig[pageSelected] = {text: textConfig[pageSelected].text, size: textConfig[pageSelected].size, color: textConfig[pageSelected].color, position: textConfig[pageSelected].position, fixtype: {ver: ver, hor: hor}, font: textConfig[pageSelected].font};
+    setTextConfig([...newTextConfig]);
+  }
 
 
   const handleChangeFile = (files: File[] | undefined) => {
@@ -99,7 +147,7 @@ export default function Home() {
     setImageGlobalPosition([...newPositionList]);
   }
 
-  const handleImageFixed = (ver: number, hor: number) => {
+  const handleImageFixed = (ver: string, hor: string) => {
     console.log(ver, hor);
     const newImageFixed = imageFixed;
     newImageFixed[pageSelected] = {ver: ver, hor: hor};
@@ -125,7 +173,7 @@ export default function Home() {
               setImageSize([...imageSize, {width: 100, height: 100}]);
               setImagePosition([...imagePosition, {x: 0, y: 0}]);
               setImageGlobalPosition([...imageGlobalPosition, {x: 50, y: 50}]);
-              setImageFixed([...imageFixed, {ver: 50, hor: 50}]);
+              setImageFixed([...imageFixed, {ver: "2", hor: "2"}]);
               setImageCrop([...imageCrop, {top: 0, bottom: 100, left: 0, right: 100}]);
               }}>+</Button>
           </CardHeader>
@@ -147,12 +195,15 @@ export default function Home() {
           <div className="col-span-4 m-2">
             <EditPage 
             cpage={pageSelected} ctitle={list[pageSelected]} cimage={imageList[pageSelected]} csize={imageSize[pageSelected]} cposition={imagePosition[pageSelected]} cglobalposition={imageGlobalPosition[pageSelected]}
-            cimagefixposition={imageFixed[pageSelected]} cimagecrop={imageCrop[pageSelected]}
+            cimagefixposition={imageFixed[pageSelected]} cimagecrop={imageCrop[pageSelected]} ctextconfig={textConfig[pageSelected]}
             onImageXPositionUpdate={handleXPositionUpdate} onImageYPositionUpdate={handleYPositionUpdate} 
             onImageWSizeUpdate={handleWSizeUpdate} onImageHSizeUpdate={handleHSizeUpdate} 
             onImageUpdate={handleChangeFile} onTitleUpdate={handleTitleUpdate}
             onImageGlobalXPositionUpdate={handleGlobalXPositionUpdate} onImageGlobalYPositionUpdate={handleGlobalYPositionUpdate}
             onImageFixPositionUpdate={handleImageFixed} onImageCropUpdate={handleImageCrop}
+            onTextUpdate={handleTextUpdate} onTextSizeUpdate={handleTextSizeUpdate} onTextColorUpdate={handleTextColorUpdate}
+            onTextPositionUpdate={handleTextPositionUpdate} onTextFixPositionUpdate={handleTextFixPositionUpdate}
+            onTextFontUpdate={handleTextFontUpdate} 
             />
           </div>
         </div>

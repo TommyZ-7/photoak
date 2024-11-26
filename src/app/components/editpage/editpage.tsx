@@ -5,6 +5,9 @@ import { Tabs, Tab, TabPanel } from "@yamada-ui/react"
 import { FileButton } from "@yamada-ui/react"
 import { GrAdd } from "react-icons/gr";
 import { Card, CardHeader, CardBody } from "@yamada-ui/react"
+import { ColorPicker } from "@yamada-ui/react"
+
+import { Divider } from "@yamada-ui/react"
 import {
     Slider,
     SliderTrack,
@@ -31,8 +34,16 @@ interface EditPageProps {
     cglobalposition: imageGlobalPositionType;
     cimagefixposition: imageFixedType;
     cimagecrop: imagecropType;
+    ctextconfig: textConfigType;
+    onTextUpdate: (text: string) => void;
+    onTextSizeUpdate: (size: number) => void;
+    onTextColorUpdate: (color: string) => void;
+    onTextPositionUpdate: (x: number, y: number) => void;
+    onTextFixPositionUpdate: (ver: string, hor: string) => void;
+    onTextFontUpdate: (font: string) => void;
+
     onImageCropUpdate: (top: number, bottom: number, left: number, right: number) => void;
-    onImageFixPositionUpdate: (ver: number, hor: number) => void;
+    onImageFixPositionUpdate: (ver: string, hor: string) => void;
     onImageGlobalXPositionUpdate: (x: number) => void;
     onImageGlobalYPositionUpdate: (y: number) => void;
     onImageXPositionUpdate: (x: number) => void;
@@ -48,6 +59,16 @@ type imageSizeType = {
     height: number;
 }
 
+type textConfigType = {
+    text: string;
+    size: number;
+    color: string;
+    position: imagePositionType;
+    fixtype: imageFixedType;
+    font: string;
+  }
+  
+
 type imagePositionType = {
     x: number;
     y: number;
@@ -59,8 +80,8 @@ type imageGlobalPositionType = {
 }
 
 type imageFixedType = {
-    ver: number;
-    hor: number;
+    ver: string;
+    hor: string;
 }
 
 type imagecropType = {
@@ -72,7 +93,10 @@ type imagecropType = {
 
 
 
-export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition, cimagefixposition , cimagecrop, onImageCropUpdate, onImageFixPositionUpdate, onImageGlobalXPositionUpdate, onImageGlobalYPositionUpdate, onImageWSizeUpdate,onImageUpdate ,onTitleUpdate }: EditPageProps) {
+export default function EditPage({
+        cpage, ctitle, cimage, csize, cglobalposition, cimagefixposition , cimagecrop, onImageCropUpdate, onImageFixPositionUpdate, onImageGlobalXPositionUpdate, onImageGlobalYPositionUpdate, onImageWSizeUpdate,onImageUpdate ,onTitleUpdate,
+        ctextconfig, onTextUpdate, onTextSizeUpdate, onTextColorUpdate, onTextPositionUpdate, onTextFixPositionUpdate, onTextFontUpdate
+    }: EditPageProps) {
     console.log(cpage)
     
     return (
@@ -84,10 +108,11 @@ export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition
                 <Tab>テキスト</Tab>
                 <Tab>プレビュー</Tab>
                 <TabPanel>
+                <FileButton as={IconButton} icon={<GrAdd />} onChange={onImageUpdate}/>
+                <Divider className="m-2"/>
+
                     <Card>
-                        <CardHeader>
-                            <FileButton as={IconButton} icon={<GrAdd />} onChange={onImageUpdate}/>
-                        </CardHeader>
+
                         <CardBody>
                             <div className="grid grid-cols-2 w-full" >
                                 <div className="m-3 relative">
@@ -124,14 +149,14 @@ export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition
                                     </Slider>
                                     <Text>中央位置</Text>
                                     <RadioGroup direction="row" value={cimagefixposition.hor} onChange={(value) => onImageFixPositionUpdate(cimagefixposition.ver, value)}>
-                                        <Radio value="0">左</Radio>
-                                        <Radio value="50">中</Radio>
-                                        <Radio value="100">右</Radio>
+                                        <Radio value="1">左</Radio>
+                                        <Radio value="2">中</Radio>
+                                        <Radio value="3">右</Radio>
                                     </RadioGroup>
                                     <RadioGroup direction="row" value={cimagefixposition.ver} onChange={(value) => onImageFixPositionUpdate(value , cimagefixposition.hor)}>
-                                        <Radio value="0">上</Radio>
-                                        <Radio value="50">中</Radio>
-                                        <Radio value="100" >下</Radio>
+                                        <Radio value="1">上</Radio>
+                                        <Radio value="2">中</Radio>
+                                        <Radio value="3" >下</Radio>
                                     </RadioGroup>
                                     <Text>トリミング</Text>
                                     <RangeSlider min={0} max={100} step={1} value={[cimagecrop.top, cimagecrop.bottom]} onChange={(value) => onImageCropUpdate(value[0], value[1], cimagecrop.left, cimagecrop.right)}>
@@ -161,7 +186,15 @@ export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition
                     </Card>
                 </TabPanel>
                 <TabPanel>
-                    <Text>テキスト</Text>
+                    <Input value={ctextconfig.text} onChange={(e) => onTextUpdate(e.target.value)} />
+                    <Text>サイズ:{ctextconfig.size}</Text>
+                    <Slider aria-label="slider-ex-1" value={ctextconfig.size} min={1} max={100} onChange={(value) => onTextSizeUpdate(value)}>
+                        <SliderTrack>
+                            <SliderFilledTrack />
+                        </SliderTrack>
+                        <SliderThumb />
+                    </Slider>
+                    <ColorPicker color={ctextconfig.color} onChange={(color) => onTextColorUpdate(color)} />
                 </TabPanel>
                 <TabPanel>
                     <div className="border relative overflow-hidden aspect-[5/7]" >
@@ -172,18 +205,26 @@ export default function EditPage({ cpage, ctitle, cimage, csize, cglobalposition
                         alt="preview" 
                         style={{width: csize.width +"%", height: "auto", top: cglobalposition.y + "%", left: cglobalposition.x + "%", clipPath: "inset(" + cimagecrop.top + "% " + (100-cimagecrop.right) + "% " + (100-cimagecrop.bottom) + "% " + cimagecrop.left + "%)", 
                             transform: "translate(" +  
-                            
-                            
-                            ((-cimagefixposition.hor) + (-cimagecrop.left/2) + ((100-cimagecrop.right)/2))
-                        
-
-                            + "%, " + 
-
-                            
-                            ((-cimagefixposition.ver) + 
-                            (-cimagecrop.top/2) + ((100-cimagecrop.bottom)/2)) + "%)"
+                            (
+                                cimagefixposition.hor === "1" ? ((-cimagecrop.left)) :
+                                cimagefixposition.hor === "3" ? -((100 - (100 - cimagecrop.right))) :
+                                cimagefixposition.hor === "2" ? (-50 + (-cimagecrop.left / 2) + ((100 - cimagecrop.right) / 2)) :
+                                "0"
+                                
+                            ) + "%, " + 
+                            (
+                                cimagefixposition.ver === "1" ? ((-cimagecrop.top)) :
+                                cimagefixposition.ver === "3" ? -((100 - (100 - cimagecrop.bottom))) :
+                                cimagefixposition.ver === "2" ? (-50 + (-cimagecrop.top / 2) + ((100 - cimagecrop.bottom) / 2)) :
+                                "0"
+                            ) + "%)"
                         }}
+                        
                         />
+
+                        <p className="absolute text-[#000] text-2xl" style={{top: ctextconfig.position.y + "%", left: ctextconfig.position.x + "%", fontSize: ctextconfig.size + "px", color: ctextconfig.color, fontFamily: ctextconfig.font}}>
+                            {ctextconfig.text}
+                        </p>
                     </div>
         </TabPanel>
             </Tabs>
