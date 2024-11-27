@@ -1,10 +1,10 @@
 'use client'
-import { IconButton, Text } from "@yamada-ui/react"
+import { Button, IconButton, Text } from "@yamada-ui/react"
 import { Input } from "@yamada-ui/react"
 import { Tabs, Tab, TabPanel } from "@yamada-ui/react"
 import { FileButton } from "@yamada-ui/react"
 import { GrAdd } from "react-icons/gr";
-import { Card, CardHeader, CardBody } from "@yamada-ui/react"
+import { Card, CardBody } from "@yamada-ui/react"
 import { ColorPicker } from "@yamada-ui/react"
 
 import { Divider } from "@yamada-ui/react"
@@ -98,6 +98,8 @@ export default function EditPage({
         ctextconfig, onTextUpdate, onTextSizeUpdate, onTextColorUpdate, onTextPositionUpdate, onTextFixPositionUpdate, onTextFontUpdate
     }: EditPageProps) {
     console.log(cpage)
+
+
     
     return (
         <div>
@@ -222,7 +224,7 @@ export default function EditPage({
                         
                         />
 
-                        <p className="absolute text-[#000] text-2xl" style={{top: ctextconfig.position.y + "%", left: ctextconfig.position.x + "%", fontSize: ctextconfig.size + "px", color: ctextconfig.color, fontFamily: ctextconfig.font}}>
+                        <p className="absolute text-[#000]" style={{top: ctextconfig.position.y + "%", left: ctextconfig.position.x + "%", fontSize: ctextconfig.size + "vw", color: ctextconfig.color, fontFamily: ctextconfig.font}}>
                             {ctextconfig.text}
                         </p>
                     </div>

@@ -61,6 +61,9 @@ export default function Home() {
   const [ textConfig , setTextConfig ] = useState<textConfigType[]>([{text: "テキスト", size: 10, color: "#000000", position: {x: 0, y: 0}, fixtype: {ver: "2", hor: "2"}, font: "Arial"}]);
 
 
+
+
+
   const handleTitleUpdate = (title: string) => {
     const newList = list;
     newList[pageSelected] = title;
@@ -175,6 +178,7 @@ export default function Home() {
               setImageGlobalPosition([...imageGlobalPosition, {x: 50, y: 50}]);
               setImageFixed([...imageFixed, {ver: "2", hor: "2"}]);
               setImageCrop([...imageCrop, {top: 0, bottom: 100, left: 0, right: 100}]);
+              setTextConfig([...textConfig, {text: "テキスト", size: 10, color: "#000000", position: {x: 0, y: 0}, fixtype: {ver: "2", hor: "2"}, font: "Arial"}]);
               }}>+</Button>
           </CardHeader>
           <CardBody>
