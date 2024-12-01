@@ -6,6 +6,7 @@ import { FileButton } from "@yamada-ui/react"
 import { GrAdd } from "react-icons/gr";
 import { Card, CardBody } from "@yamada-ui/react"
 import { ColorPicker } from "@yamada-ui/react"
+import { useMeasure } from "react-use"
 
 import { Divider } from "@yamada-ui/react"
 import {
@@ -99,11 +100,18 @@ export default function EditPage({
     }: EditPageProps) {
     console.log(cpage)
 
+    const [ref, { width }] = useMeasure()
+
+    const handleTest = () => {
+        console.log(ctextconfig.size * (width / 100) + "px"
+        )
+    }
 
     
     return (
         <div>
             <Text>{ctitle}</Text>
+            <Button onClick={handleTest}>test</Button>
             <Input value={ctitle} onChange={(e) => onTitleUpdate(e.target.value)} />
             <Tabs>
                 <Tab>画像</Tab>
@@ -194,9 +202,10 @@ export default function EditPage({
                         <SliderThumb />
                     </Slider>
                     <ColorPicker color={ctextconfig.color} onChange={(color) => onTextColorUpdate(color)} />
+                
                 </TabPanel>
                 <TabPanel>
-                    <div className="border relative overflow-hidden aspect-[5/7]" >
+                    <div ref={ref as React.LegacyRef<HTMLDivElement>} className="border relative overflow-hidden aspect-[5/7]" >
 
                         <img 
                         src={cimage} 
@@ -221,8 +230,8 @@ export default function EditPage({
                         
                         />
 
-                        <p className="absolute text-[#000]" style={{top: ctextconfig.position.y + "%", left: ctextconfig.position.x + "%", fontSize: ctextconfig.size + "vw", color: ctextconfig.color, fontFamily: ctextconfig.font}}>
-                            {ctextconfig.text}
+                        <p className="absolute text-[#000]" style={{top: ctextconfig.position.y + "%", left: ctextconfig.position.x + "%", fontSize: (ctextconfig.size * (width / 100))/5 + "px", color: ctextconfig.color, fontFamily: ctextconfig.font}}>
+                            {ctextconfig.text} {width}
                         </p>
                     </div>
         </TabPanel>
