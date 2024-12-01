@@ -179,9 +179,6 @@ export default function EditPage({
                                         <RangeSliderMark value={cimagecrop.left} />
                                         <RangeSliderMark value={cimagecrop.right} />
                                     </RangeSlider>
-
-
-
                                 </div>
                             </div>
                         </CardBody>
