@@ -231,7 +231,7 @@ export default function EditPage({
                         />
 
                         <p className="absolute text-[#000]" style={{top: ctextconfig.position.y + "%", left: ctextconfig.position.x + "%", fontSize: (ctextconfig.size * (width / 100))/5 + "px", color: ctextconfig.color, fontFamily: ctextconfig.font}}>
-                            {ctextconfig.text} {width}
+                            {ctextconfig.text}
                         </p>
                     </div>
         </TabPanel>
