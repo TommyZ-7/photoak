@@ -314,7 +314,7 @@ export default function EditPage({
           >
             <img
               src={cimage}
-              className={"absolute object-fill "}
+              className={"absolute object-fill max-w-none"}
               alt="preview"
               style={{
                 width: csize.width + "%",
