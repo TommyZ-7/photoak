@@ -25,6 +25,153 @@ import {
   RangeSliderMark,
 } from "@yamada-ui/react";
 
+import { Select, Option, OptionGroup } from "@yamada-ui/react";
+
+import { Accordion, AccordionItem } from "@yamada-ui/react";
+
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+} from "@yamada-ui/react";
+
+import {
+  Rampart_One,
+  Noto_Sans_JP,
+  Noto_Serif_JP,
+  Shippori_Mincho,
+  Potta_One,
+  Kaisei_Decol,
+  Yuji_Mai,
+  Klee_One,
+  Zen_Kurenaido,
+  Reggae_One,
+  Sawarabi_Mincho,
+  Lora,
+  Cinzel,
+  Poiret_One,
+  Dancing_Script,
+  Allura,
+} from "next/font/google";
+
+const RampartOneFont = Rampart_One({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const NotoSansJPFont = Noto_Sans_JP({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const NotoSerifJPFont = Noto_Serif_JP({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const ShipporiMinchoFont = Shippori_Mincho({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const PottaOneFont = Potta_One({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const KaiseiDecolFont = Kaisei_Decol({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const YujiMaiFont = Yuji_Mai({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const KleeOneFont = Klee_One({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const ZenKurenaidoFont = Zen_Kurenaido({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const ReggaeOneFont = Reggae_One({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const SawarabiMinchoFont = Sawarabi_Mincho({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const LoraFont = Lora({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const CinzelFont = Cinzel({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const PoiretOneFont = Poiret_One({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const DancingScriptFont = Dancing_Script({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const AlluraFont = Allura({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const fonts = [
+  RampartOneFont,
+  NotoSansJPFont,
+  NotoSerifJPFont,
+  ShipporiMinchoFont,
+  PottaOneFont,
+  KaiseiDecolFont,
+  YujiMaiFont,
+  KleeOneFont,
+  ZenKurenaidoFont,
+  ReggaeOneFont,
+  SawarabiMinchoFont,
+  LoraFont,
+  CinzelFont,
+  PoiretOneFont,
+  DancingScriptFont,
+  AlluraFont,
+];
+const fontNames = [
+  "Rampart One",
+  "Noto Sans JP",
+  "Noto Serif JP",
+  "Shippori Mincho",
+  "Potta One",
+  "Kaisei Decol",
+  "Yuji Mai",
+  "Klee One",
+  "Zen Kurenaido",
+  "Reggae One",
+  "Sawarabi Mincho",
+  "Lora",
+  "Cinzel",
+  "Poiret One",
+  "Dancing Script",
+  "Allura",
+];
+
 interface EditPageProps {
   cpage: number;
   ctitle: string;
@@ -167,114 +314,133 @@ export default function EditPage({
                   />
                 </div>
                 <div className="m-3">
-                  <Text>設定</Text>
-                  <Text>サイズ:{csize.width}</Text>
-                  <Slider
-                    aria-label="slider-ex-1"
-                    value={csize.width}
-                    min={1}
-                    max={200}
-                    onChange={(value) => onImageWSizeUpdate(value)}
-                  >
-                    <SliderTrack>
-                      <SliderFilledTrack />
-                    </SliderTrack>
-                    <SliderThumb />
-                  </Slider>
-                  <Text>横:{cglobalposition.x}</Text>
-                  <Slider
-                    aria-label="slider-ex-1"
-                    value={cglobalposition.x}
-                    min={0}
-                    max={100}
-                    onChange={(value) => onImageGlobalXPositionUpdate(value)}
-                  >
-                    <SliderTrack>
-                      <SliderFilledTrack />
-                    </SliderTrack>
-                    <SliderThumb />
-                  </Slider>
-                  <Text>縦:{cglobalposition.y}</Text>
-                  <Slider
-                    aria-label="slider-ex-1"
-                    value={cglobalposition.y}
-                    min={0}
-                    max={100}
-                    onChange={(value) => onImageGlobalYPositionUpdate(value)}
-                  >
-                    <SliderTrack>
-                      <SliderFilledTrack />
-                    </SliderTrack>
-                    <SliderThumb />
-                  </Slider>
-                  <Text>中央位置</Text>
-                  <RadioGroup
-                    direction="row"
-                    value={cimagefixposition.hor}
-                    onChange={(value) =>
-                      onImageFixPositionUpdate(cimagefixposition.ver, value)
-                    }
-                  >
-                    <Radio value="1">左</Radio>
-                    <Radio value="2">中</Radio>
-                    <Radio value="3">右</Radio>
-                  </RadioGroup>
-                  <RadioGroup
-                    direction="row"
-                    value={cimagefixposition.ver}
-                    onChange={(value) =>
-                      onImageFixPositionUpdate(value, cimagefixposition.hor)
-                    }
-                  >
-                    <Radio value="1">上</Radio>
-                    <Radio value="2">中</Radio>
-                    <Radio value="3">下</Radio>
-                  </RadioGroup>
-                  <Text>トリミング</Text>
-                  <RangeSlider
-                    min={0}
-                    max={100}
-                    step={1}
-                    value={[cimagecrop.top, cimagecrop.bottom]}
-                    onChange={(value) =>
-                      onImageCropUpdate(
-                        value[0],
-                        value[1],
-                        cimagecrop.left,
-                        cimagecrop.right
-                      )
-                    }
-                  >
-                    <RangeSliderTrack>
-                      <RangeSliderFilledTrack />
-                    </RangeSliderTrack>
-                    <RangeSliderStartThumb />
-                    <RangeSliderEndThumb />
-                    <RangeSliderMark value={cimagecrop.top} />
-                    <RangeSliderMark value={cimagecrop.bottom} />
-                  </RangeSlider>
-                  <RangeSlider
-                    min={0}
-                    max={100}
-                    step={1}
-                    value={[cimagecrop.left, cimagecrop.right]}
-                    onChange={(value) =>
-                      onImageCropUpdate(
-                        cimagecrop.top,
-                        cimagecrop.bottom,
-                        value[0],
-                        value[1]
-                      )
-                    }
-                  >
-                    <RangeSliderTrack>
-                      <RangeSliderFilledTrack />
-                    </RangeSliderTrack>
-                    <RangeSliderStartThumb />
-                    <RangeSliderEndThumb />
-                    <RangeSliderMark value={cimagecrop.left} />
-                    <RangeSliderMark value={cimagecrop.right} />
-                  </RangeSlider>
+                  <Accordion isMultiple>
+                    <AccordionItem label="サイズ">
+                      <Text>サイズ:{csize.width}</Text>
+                      <Slider
+                        aria-label="slider-ex-1"
+                        value={csize.width}
+                        min={1}
+                        max={200}
+                        onChange={(value) => onImageWSizeUpdate(value)}
+                      >
+                        <SliderTrack>
+                          <SliderFilledTrack />
+                        </SliderTrack>
+                        <SliderThumb />
+                      </Slider>
+                    </AccordionItem>
+                    <AccordionItem label="位置">
+                      <Text>横:{cglobalposition.x}</Text>
+                      <Slider
+                        aria-label="slider-ex-1"
+                        value={cglobalposition.x}
+                        min={0}
+                        max={100}
+                        onChange={(value) =>
+                          onImageGlobalXPositionUpdate(value)
+                        }
+                      >
+                        <SliderTrack>
+                          <SliderFilledTrack />
+                        </SliderTrack>
+                        <SliderThumb />
+                      </Slider>
+                      <Text>縦:{cglobalposition.y}</Text>
+                      <Slider
+                        aria-label="slider-ex-1"
+                        value={cglobalposition.y}
+                        min={0}
+                        max={100}
+                        onChange={(value) =>
+                          onImageGlobalYPositionUpdate(value)
+                        }
+                      >
+                        <SliderTrack>
+                          <SliderFilledTrack />
+                        </SliderTrack>
+                        <SliderThumb />
+                      </Slider>
+                      <Text>中央位置</Text>
+                      <RadioGroup
+                        direction="row"
+                        value={cimagefixposition.hor}
+                        onChange={(value) =>
+                          onImageFixPositionUpdate(cimagefixposition.ver, value)
+                        }
+                      >
+                        <Radio value="1">左</Radio>
+                        <Radio value="2">中</Radio>
+                        <Radio value="3">右</Radio>
+                      </RadioGroup>
+                      <RadioGroup
+                        direction="row"
+                        value={cimagefixposition.ver}
+                        onChange={(value) =>
+                          onImageFixPositionUpdate(value, cimagefixposition.hor)
+                        }
+                      >
+                        <Radio value="1">上</Radio>
+                        <Radio value="2">中</Radio>
+                        <Radio value="3">下</Radio>
+                      </RadioGroup>
+                    </AccordionItem>
+                    <AccordionItem label="クロップ">
+                      <br />
+                      <Alert status="warning">
+                        <AlertIcon />
+                        <AlertTitle></AlertTitle>
+                        <AlertDescription>
+                          クロップを使用すると環境によって表示がずれる可能性があります。
+                        </AlertDescription>
+                      </Alert>
+                      <Text>トリミング</Text>
+                      <RangeSlider
+                        min={0}
+                        max={100}
+                        step={1}
+                        value={[cimagecrop.top, cimagecrop.bottom]}
+                        onChange={(value) =>
+                          onImageCropUpdate(
+                            value[0],
+                            value[1],
+                            cimagecrop.left,
+                            cimagecrop.right
+                          )
+                        }
+                      >
+                        <RangeSliderTrack>
+                          <RangeSliderFilledTrack />
+                        </RangeSliderTrack>
+                        <RangeSliderStartThumb />
+                        <RangeSliderEndThumb />
+                        <RangeSliderMark value={cimagecrop.top} />
+                        <RangeSliderMark value={cimagecrop.bottom} />
+                      </RangeSlider>
+                      <RangeSlider
+                        min={0}
+                        max={100}
+                        step={1}
+                        value={[cimagecrop.left, cimagecrop.right]}
+                        onChange={(value) =>
+                          onImageCropUpdate(
+                            cimagecrop.top,
+                            cimagecrop.bottom,
+                            value[0],
+                            value[1]
+                          )
+                        }
+                      >
+                        <RangeSliderTrack>
+                          <RangeSliderFilledTrack />
+                        </RangeSliderTrack>
+                        <RangeSliderStartThumb />
+                        <RangeSliderEndThumb />
+                        <RangeSliderMark value={cimagecrop.left} />
+                        <RangeSliderMark value={cimagecrop.right} />
+                      </RangeSlider>
+                    </AccordionItem>
+                  </Accordion>
                 </div>
               </div>
             </CardBody>
@@ -304,6 +470,22 @@ export default function EditPage({
                 color={ctextconfig.color}
                 onChange={(color) => onTextColorUpdate(color)}
               />
+              <Text>フォント</Text>
+              <Select
+                className={ctextconfig.font}
+                placeholder="フォント"
+                onChange={(value) => onTextFontUpdate(value)}
+              >
+                {fonts.map((font, index) => (
+                  <Option
+                    key={index}
+                    value={font.className}
+                    className={font.className}
+                  >
+                    {fontNames[index]}
+                  </Option>
+                ))}
+              </Select>
             </CardBody>
           </Card>
         </TabPanel>
@@ -353,13 +535,13 @@ export default function EditPage({
             />
 
             <p
-              className="absolute text-[#000]"
+              className={ctextconfig.font + " absolute text-[#000]"}
               style={{
                 top: ctextconfig.position.y + "%",
                 left: ctextconfig.position.x + "%",
                 fontSize: (ctextconfig.size * (width / 100)) / 5 + "px",
                 color: ctextconfig.color,
-                fontFamily: ctextconfig.font,
+                fontStyle: "oblique",
               }}
             >
               {ctextconfig.text}
