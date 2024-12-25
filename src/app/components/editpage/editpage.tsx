@@ -204,6 +204,7 @@ interface EditPageProps {
   onImageHSizeUpdate: (height: number) => void;
   onImageUpdate: (files: File[] | undefined) => void;
   onTitleUpdate: (title: string) => void;
+  onFontStyleUpdate: (fontStyle: string) => void;
 }
 
 type imageSizeType = {
@@ -218,6 +219,7 @@ type textConfigType = {
   position: imagePositionType;
   fixtype: imageFixedType;
   font: string;
+  fontStyle: string;
 };
 
 type imagePositionType = {
@@ -264,6 +266,7 @@ export default function EditPage({
   onTextPositionUpdate,
   onTextFixPositionUpdate,
   onTextFontUpdate,
+  onFontStyleUpdate,
 }: EditPageProps) {
   console.log(cpage);
 
@@ -473,7 +476,7 @@ export default function EditPage({
               <Text>フォント</Text>
               <Select
                 className={ctextconfig.font}
-                placeholder="フォント"
+                placeholder="標準"
                 onChange={(value) => onTextFontUpdate(value)}
               >
                 {fonts.map((font, index) => (
@@ -486,6 +489,16 @@ export default function EditPage({
                   </Option>
                 ))}
               </Select>
+              <Text>フォントスタイル</Text>
+              <RadioGroup
+                direction="row"
+                value={ctextconfig.fontStyle}
+                onChange={(value) => onFontStyleUpdate(value)}
+              >
+                <Radio value="normal">標準</Radio>
+                <Radio value="italic">斜体</Radio>
+                <Radio value="oblique">傾斜</Radio>
+              </RadioGroup>
             </CardBody>
           </Card>
         </TabPanel>
@@ -533,7 +546,6 @@ export default function EditPage({
                   "%)",
               }}
             />
-
             <p
               className={ctextconfig.font + " absolute text-[#000]"}
               style={{
@@ -541,7 +553,7 @@ export default function EditPage({
                 left: ctextconfig.position.x + "%",
                 fontSize: (ctextconfig.size * (width / 100)) / 5 + "px",
                 color: ctextconfig.color,
-                fontStyle: "oblique",
+                fontStyle: ctextconfig.fontStyle,
               }}
             >
               {ctextconfig.text}
